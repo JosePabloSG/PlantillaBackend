@@ -1,8 +1,19 @@
+using Entities.Models;
 using Entities.Services;
 using Microsoft.EntityFrameworkCore;
+using Services;
+using Services.Interfaces;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.WithOrigins("*")
+            .AllowAnyHeader().AllowAnyMethod();
+    });
+});
 
 // Add services to the container.
 
@@ -18,7 +29,8 @@ builder.Services.AddDbContext<ExamenContext>(opt =>
 });
 
 
-
+builder.Services.AddScoped<IViaje, ViajeService>();
+builder.Services.AddScoped<IRutum, RutasService>();
 
 var app = builder.Build();
 
@@ -30,6 +42,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Entities.Services;
+namespace Entities.Models;
 
-public partial class Ticket
+public partial class Pasajero
 {
     public int Id { get; set; }
 
     public int IdViaje { get; set; }
-
-    public virtual Viaje IdViajeNavigation { get; set; } = null!;
 }
