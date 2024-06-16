@@ -17,7 +17,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCitas()
+        public async Task<IActionResult> GetRutas ()
         {
             var rutas_request = await _rutum.GetRutas();
 
