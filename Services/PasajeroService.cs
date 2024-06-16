@@ -2,7 +2,7 @@
 
 using Entities.Models;
 
-namespace Services.Interfaces
+namespace Services
 {
     public class PasajeroService
     {
