@@ -1,9 +1,5 @@
 ﻿using Entities.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Services.Interfaces;
 
 namespace API.Controllers
@@ -33,6 +29,16 @@ namespace API.Controllers
             return Ok(viajes_request);
         }
 
+        [HttpGet]
+        [Route("ObtenerPrecio")]
+        public async Task<IActionResult> ObtenerPrecio(int salida, int destino)
+        {
+
+            var precioViaje = _viajeServices.ObtenerPrecio(salida, destino); 
+     
+
+            return Ok(precioViaje);
+        }
 
 
         [HttpPost]
@@ -46,12 +52,13 @@ namespace API.Controllers
                 else
                 {
                     await _viajeServices.PostViajes(viajeRequest);
-                    return Ok(viajeRequest);
+                    return Ok(new { message = "Viaje añadido"});
                 }
 
 
-            }
-        }
+         }
 
-    }
+
+        }
+}
 

@@ -14,7 +14,8 @@ namespace Services.Interfaces
 
         Task<ViajeRequest> PostViajes(ViajeRequest viajeRequest);
 
-
         public bool HasViajeTheSameDay(ViajeRequest viajeRequest);
+
+        public int ObtenerPrecio(int salida, int destino);
     }
 }

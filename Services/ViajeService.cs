@@ -50,29 +50,34 @@ namespace Services
             return true;
         }
 
-        async public Task<ViajeRequest> PostViajes(ViajeRequest viajeRequest)
+        public int ObtenerPrecio(int salida, int destino)
         {
-
-            var pasajeros = _context.Pasajeros.Where(item => item.IdViaje == 
-            _context.Viajes.FirstOrDefault(e => e.Fecha.Day == viajeRequest.Fecha.Day
-            && e.Fecha.Month == viajeRequest.Fecha.Month && e.Fecha.Year == viajeRequest.Fecha.Year)!.Id).ToList();
-
-            if (HasViajeTheSameDay(viajeRequest) && pasajeros.Count >= 10 )
+            if (salida == 1 && destino == 2 || destino == 1 && salida == 2)
             {
-                return null;
+                return 500;
             }
-
-            if (viajeRequest.Lugar_salida == 1 && viajeRequest.Lugar_llegada == 2 || viajeRequest.Lugar_llegada == 1 && viajeRequest.Lugar_salida == 2)
+            else if (salida == 2 && destino == 3 || salida == 2 && destino == 3)
             {
-                viajeRequest.Precio = 500;
-            }
-            else if (viajeRequest.Lugar_salida == 2 && viajeRequest.Lugar_llegada == 3 || viajeRequest.Lugar_llegada == 2 && viajeRequest.Lugar_salida==3 ) {
-                viajeRequest.Precio = 1000;
+                return 1000;
             }
             else
             {
-                viajeRequest.Precio = 1500;
+                return 1500;
             }
+
+        }
+
+        async public Task<ViajeRequest> PostViajes(ViajeRequest viajeRequest)
+        {
+            DateTime date = new DateTime(viajeRequest.Fecha, viajeRequest.Hora);
+            //var ListPasajero = await _pasajeros.GetPasajeros(date);
+
+            /*if (HasViajeTheSameDay(viajeRequest) && ListPasajero.Count >= 10 )
+            {
+                return null;
+            }*/
+
+            viajeRequest.Precio = ObtenerPrecio(viajeRequest.Lugar_salida, viajeRequest.Lugar_llegada);
 
             Viaje viaje = new Viaje {IdRuta1 = viajeRequest.Lugar_salida, IdRuta2 = viajeRequest.Lugar_llegada,
                 Fecha = new DateTime(viajeRequest.Fecha, viajeRequest.Hora), Precio = viajeRequest.Precio};
@@ -80,15 +85,12 @@ namespace Services
 
 
             _context.Viajes.Add(viaje);
-            
-
             await _context.SaveChangesAsync();
-
             Pasajero pasajero = new Pasajero { IdViaje = viajeRequest.Id };
-
             _context.Pasajeros.Add(pasajero);
-
             await _context.SaveChangesAsync();
+
+
 
             return viajeRequest;
 

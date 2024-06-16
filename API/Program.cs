@@ -31,6 +31,7 @@ builder.Services.AddDbContext<ExamenContext>(opt =>
 
 builder.Services.AddScoped<IViaje, ViajeService>();
 builder.Services.AddScoped<IRutum, RutasService>();
+//builder.Services.AddScoped<IPasajeros, PasajeroService>();
 
 var app = builder.Build();
 
