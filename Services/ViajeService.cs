@@ -53,16 +53,12 @@ namespace Services
         async public Task<ViajeRequest> PostViajes(ViajeRequest viajeRequest)
         {
 
-
-
-
             var pasajeros = _context.Pasajeros.Where(item => item.IdViaje == 
             _context.Viajes.FirstOrDefault(e => e.Fecha.Day == viajeRequest.Fecha.Day
             && e.Fecha.Month == viajeRequest.Fecha.Month && e.Fecha.Year == viajeRequest.Fecha.Year)!.Id).ToList();
 
             if (HasViajeTheSameDay(viajeRequest) && pasajeros.Count >= 10 )
             {
-                
                 return null;
             }
 
@@ -81,9 +77,15 @@ namespace Services
             Viaje viaje = new Viaje {IdRuta1 = viajeRequest.Lugar_salida, IdRuta2 = viajeRequest.Lugar_llegada,
                 Fecha = new DateTime(viajeRequest.Fecha, viajeRequest.Hora), Precio = viajeRequest.Precio};
 
-            Pasajero pasajero = new Pasajero();
+
 
             _context.Viajes.Add(viaje);
+            
+
+            await _context.SaveChangesAsync();
+
+            Pasajero pasajero = new Pasajero { IdViaje = viajeRequest.Id };
+
             _context.Pasajeros.Add(pasajero);
 
             await _context.SaveChangesAsync();
