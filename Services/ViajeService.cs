@@ -1,11 +1,6 @@
 ﻿using Entities.Models;
 using Entities.Services;
 using Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services
 {
@@ -13,10 +8,12 @@ namespace Services
     {
 
         private readonly ExamenContext _context;
+        private readonly IPasajeros _pasajeros;
 
-        public ViajeService(ExamenContext context)
+        public ViajeService(ExamenContext context, IPasajeros pasajeros)
         {
             _context = context;
+            _pasajeros = pasajeros;
         }
 
         async public Task<List<Viaje>> GetViajes()
@@ -70,12 +67,12 @@ namespace Services
         async public Task<ViajeRequest> PostViajes(ViajeRequest viajeRequest)
         {
             DateTime date = new DateTime(viajeRequest.Fecha, viajeRequest.Hora);
-            //var ListPasajero = await _pasajeros.GetPasajeros(date);
+            var ListPasajero = await _pasajeros.GetPasajeros(date);
 
-            /*if (HasViajeTheSameDay(viajeRequest) && ListPasajero.Count >= 10 )
+            if (ListPasajero.Count >= 10 )
             {
                 return null;
-            }*/
+            }
 
             viajeRequest.Precio = ObtenerPrecio(viajeRequest.Lugar_salida, viajeRequest.Lugar_llegada);
 
@@ -86,7 +83,7 @@ namespace Services
 
             _context.Viajes.Add(viaje);
             await _context.SaveChangesAsync();
-            Pasajero pasajero = new Pasajero { IdViaje = viajeRequest.Id };
+            Pasajero pasajero = new Pasajero { IdViaje = viaje.Id };
             _context.Pasajeros.Add(pasajero);
             await _context.SaveChangesAsync();
 

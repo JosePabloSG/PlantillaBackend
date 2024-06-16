@@ -1,10 +1,12 @@
 ﻿
 
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
+using Services.Interfaces;
 
 namespace Services
 {
-    public class PasajeroService
+    public class PasajeroService : IPasajeros
     {
         private readonly ExamenContext _context;
 
@@ -16,14 +18,14 @@ namespace Services
         public async Task<List<Pasajero>> GetPasajeros(DateTime date)
         {
             var viajesenFecha = await _context.Viajes
-                .where(k => k.fecha.date == date.Date)
+                .Where(k => k.Fecha.Date == date.Date)
                 .ToListAsync();
 
-            var viajesId = viajesenFecha.Select(k => k.id).ToList();
+            var viajesId = viajesenFecha.Select(k => k.Id).ToList();
 
             var pasajeros = await _context.Pasajeros
-                .where(s => viajesId.Contains(s.id))
-                .toListAsync();
+                .Where(s => viajesId.Contains(s.Id))
+                .ToListAsync();
 
             int conteo = pasajeros.Count;
 

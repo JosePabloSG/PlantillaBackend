@@ -51,7 +51,11 @@ namespace API.Controllers
                 }
                 else
                 {
-                    await _viajeServices.PostViajes(viajeRequest);
+                   var viaje =  await _viajeServices.PostViajes(viajeRequest);
+                        if (viaje == null)
+                        {
+                            return Ok(new { message = "Ya no quedan campos libres" });
+                        }
                     return Ok(new { message = "Viaje añadido"});
                 }
 
