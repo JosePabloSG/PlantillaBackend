@@ -49,17 +49,26 @@ namespace Services
 
         public int ObtenerPrecio(int salida, int destino)
         {
+            if(salida == destino)
+            {
+                return -1;
+            }
+
             if (salida == 1 && destino == 2 || destino == 1 && salida == 2)
             {
                 return 500;
             }
-            else if (salida == 2 && destino == 3 || salida == 2 && destino == 3)
+            else if (salida == 2 && destino == 3 || salida == 3 && destino == 2)
             {
                 return 1000;
             }
-            else
+            else if (salida == 1 && destino == 3 || destino == 1 && salida ==3 )
             {
                 return 1500;
+            }
+            else
+            {
+                return 0;
             }
 
         }
@@ -67,6 +76,7 @@ namespace Services
         async public Task<ViajeRequest> PostViajes(ViajeRequest viajeRequest)
         {
             DateTime date = new DateTime(viajeRequest.Fecha, viajeRequest.Hora);
+
             var ListPasajero = await _pasajeros.GetPasajeros(date);
 
             if (ListPasajero.Count >= 10 )

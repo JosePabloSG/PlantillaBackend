@@ -30,14 +30,24 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("ObtenerPrecio")]
+        [Route("/ObtenerPrecio")]
         public async Task<IActionResult> ObtenerPrecio(int salida, int destino)
         {
 
-            var precioViaje = _viajeServices.ObtenerPrecio(salida, destino); 
-     
+            var precioViaje = _viajeServices.ObtenerPrecio(salida, destino);
 
-            return Ok(precioViaje);
+            if (precioViaje == -1)
+            {
+                return BadRequest(new { message = "La salida y destino no pueden ser el mismo" });
+            }
+
+            if(precioViaje == 0)
+            {
+                return BadRequest(new { message = "Las rutas seleccionadas no estan disponibles o no existen" });
+            }
+           
+
+            return Ok(new { precio = precioViaje });
         }
 
 
