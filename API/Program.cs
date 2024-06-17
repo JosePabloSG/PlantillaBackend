@@ -25,7 +25,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ExamenContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("sql"));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("sqlDefault"));
 });
 
 

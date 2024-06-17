@@ -19,30 +19,40 @@ namespace Services
 
         public FiltradoResponse FiltrarDatos(int? lugarSalida, int? lugarLlegada, DateTime? fechaInicio, DateTime? fechaFin)
         {
-            var query = _context.Viajes.AsQueryable();
+            var query1 = _context.Viajes.AsQueryable();
+            var query2 = _context.Viajes.AsQueryable();
 
             if (lugarSalida.HasValue)
             {
-                query = query.Where(v => v.IdRuta1 == lugarSalida.Value);
+                query1 = query1.Where(v => v.IdRuta1 == lugarSalida.Value );
+                query2 = query2.Where(v => v.IdRuta2 == lugarSalida.Value);
             }
+
+
 
             if (lugarLlegada.HasValue)
             {
-                query = query.Where(v => v.IdRuta2 == lugarLlegada.Value);
+                query1 = query1.Where(v => v.IdRuta2 == lugarLlegada.Value);
+                query2 = query2.Where(v => v.IdRuta1 == lugarLlegada.Value);
+
             }
 
             if (fechaInicio.HasValue)
             {
-                query = query.Where(v => v.Fecha >= fechaInicio.Value);
+                query1 = query1.Where(v => v.Fecha >= fechaInicio.Value);
+                query2 = query2.Where(v => v.Fecha >= fechaInicio.Value);
             }
+
 
             if (fechaFin.HasValue)
             {
-                query = query.Where(v => v.Fecha <= fechaFin.Value);
+                query1 = query1.Where(v => v.Fecha <= fechaFin.Value);
+                query2 = query2.Where(v => v.Fecha <= fechaFin.Value);
             }
 
-            var cantidadPasajeros = query.Count();
-            var dineroRecolectado = query.Sum(v => v.Precio);
+
+            var cantidadPasajeros = query1.Count() + query2.Count();
+            var dineroRecolectado = query1.Sum(v => v.Precio) + query2.Sum(v => v.Precio);
 
             return new FiltradoResponse
             {
