@@ -22,6 +22,7 @@ public partial class ExamenContext : DbContext
     public virtual DbSet<Viaje> Viajes { get; set; }
 
 
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
