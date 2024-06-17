@@ -13,6 +13,8 @@ namespace API.Controllers
     {
         private readonly IDashboardService _dashboardService;
 
+        
+
         public DashboardController(IDashboardService dashboardService)
         {
             _dashboardService = dashboardService;
@@ -23,6 +25,22 @@ namespace API.Controllers
         {
             var resultado = _dashboardService.FiltrarDatos(lugarSalida, lugarLlegada, fechaInicio, fechaFin);
             return Ok(resultado);
+        }
+
+        [HttpGet("page-routes")]
+        public ActionResult<List<PageRoutesResponse>> ObtenerRutas()
+        {
+            
+
+            var data = new List<PageRoutesResponse>();
+            data.Add(new PageRoutesResponse{id = 1, name = "HomePage", path = "/"});
+            data.Add(new PageRoutesResponse { id = 2, name = "DashboardPage", path = "/dashboard"});
+
+            JsonResult Rutas = new JsonResult(data);
+
+
+            return Ok(data);
+
         }
     }
 }
